@@ -11,12 +11,13 @@
 # Modification History
 # RCW  2015-05-10  New today
 
+# Ensure the Household Power Consumption dataset is available in the data directory
+source('download_hpc_data_file.R')
 
-setwd('~/Coursera/Exploratory Data Analysis/ProgrammingAssignment1/ExData_Plotting1')
-
-# Assume household_power_consumption.txt is available in the current working directory; semi-colon separated
 # Extract subset of data used for displaying the plot: Feb 1, 2007 - Feb 2, 2007
-hpc.feb07 <- read.table(pipe(description='egrep ^Date\\|^[12]\\/2\\/2007 household_power_consumption.txt', open="r"), header=T, sep=';')
+hpc_subset <- pipe(description=paste('egrep', '^Date\\|^[12]\\/2\\/2007', hpc.data.file), open="r")
+hpc.feb07 <- read.table(hpc_subset, header=T, sep=';')
+close(hpc_subset)
 
 # Convert and combine date and time columns from factors to actual data type
 hpc.feb07 = transform(hpc.feb07, Date = strptime(paste(Date, Time), '%d/%m/%Y %H:%M:%S'))
